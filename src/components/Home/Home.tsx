@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useDarkMode from "../../hooks/useDarkMode";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
+import useTypingEffect from "../../hooks/useTypingEffect";
+import { FaGithub, FaLinkedin, FaFileAlt } from "react-icons/fa";
 import "./Home.css"; // Import the CSS file
 
 interface HomeProps {
@@ -9,28 +10,10 @@ interface HomeProps {
 
 const Home: React.FC<HomeProps> = ({ message }) => {
   const [isDarkMode] = useDarkMode();
-  const [name, setName] = useState("Kuldeep Here!");
-  const [displayedName, setDisplayedName] = useState("");
-  const [showIcons, setShowIcons] = useState(false); // New state variable
-
-  useEffect(() => {
-    let index = 0;
-    const interval = setInterval(() => {
-      setDisplayedName((prev) => prev + name[index]);
-      index++;
-      if (index === name.length) {
-        clearInterval(interval);
-      }
-    }, 100); // Adjust typing speed here
-    return () => clearInterval(interval);
-  }, [name]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowIcons(true);
-    }, 1000); // Show icons after 2 seconds
-    return () => clearTimeout(timer);
-  }, []);
+  const [name, setName] = useState(
+    "Hey, I am Kuldeep, <br /> Front End Developer based in Bali"
+  );
+  const displayedText = useTypingEffect(name, 75); // Use the custom hook
 
   return (
     <div
@@ -38,13 +21,17 @@ const Home: React.FC<HomeProps> = ({ message }) => {
         isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"
       } flex items-center justify-center`}
     >
-      <div className="">
-        <header className="mb-4">
-          <h1 className="text-4xl font-bold typing">{displayedName}</h1>
+      <div>
+        <header className="mb-4 ">
+          <h1
+            className="text-4xl font-bold typing retro-text"
+            dangerouslySetInnerHTML={{ __html: displayedText }}
+          ></h1>
         </header>
+
         <div
           className={`flex justify-center space-x-4 mt-8 transition-opacity duration-1000 ${
-            showIcons ? "opacity-100" : "opacity-0"
+            displayedText.length === name.length ? "opacity-100" : "opacity-0"
           }`}
         >
           <a
@@ -60,6 +47,13 @@ const Home: React.FC<HomeProps> = ({ message }) => {
             rel="noopener noreferrer"
           >
             <FaLinkedin className="h-6 w-6 transform transition-transform duration-200 hover:scale-125" />
+          </a>
+          <a
+            href="https://drive.google.com/file/d/1uxu_EqkN9jOfwqq3-7kULUpw7CVo3zno/view?usp=drive_link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaFileAlt className="h-6 w-6 transform transition-transform duration-200 hover:scale-125" />
           </a>
         </div>
         <main></main>
