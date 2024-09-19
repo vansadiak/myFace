@@ -20,13 +20,3 @@
     opacity: 0;
   }
 }
-
-/* Add this to your App.css file */
-.transition-opacity {
-  opacity: 0;
-  transition: opacity 1s ease-in-out;
-}
-
-.opacity-100 {
-  opacity: 1;
-}

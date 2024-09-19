@@ -6,7 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App message="Hello, TypeScript with React and Tailwind CSS!" />
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 );
