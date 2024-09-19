@@ -1,0 +1,7 @@
+.projects-container {
+  transition: opacity 0.5s ease-out;
+}
+
+.projects-container.fade-out {
+  opacity: 0;
+}
