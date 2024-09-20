@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { BsCursor } from "react-icons/bs"; // Import the arrow icon
 
 interface LaptopSVGProps {
   isDarkMode: boolean;
@@ -117,4 +118,25 @@ const LaptopSVG: React.FC<LaptopSVGProps> = ({ isDarkMode }) => {
   );
 };
 
-export default LaptopSVG;
+const RunningCursorSVG: React.FC<LaptopSVGProps> = ({ isDarkMode }) => {
+  return (
+    <motion.div
+      className={`ml-4 h-16 w-16 ${isDarkMode ? "svg-dark" : "svg-light"}`}
+      initial={{ opacity: 1 }} // Initial state
+      animate={{ opacity: 1 }} // Animate back to initial state
+      whileHover={{
+        x: [0, -5, 5, -5, 5, 0], // Shakes left and right
+        opacity: [1, 1, 0], // Disappears
+        transition: {
+          duration: 1, // Total duration of the hover effect
+          ease: "easeInOut",
+        },
+      }}
+    >
+      <BsCursor size={28} color="currentColor" /> {/* Arrow icon */}
+    </motion.div>
+  );
+};
+
+// Export both components
+export { LaptopSVG, RunningCursorSVG };
