@@ -1,19 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import useDarkMode from "../../hooks/useDarkMode";
 import useTypingEffect from "../../hooks/useTypingEffect";
 import { FaGithub, FaLinkedin, FaFileAlt } from "react-icons/fa";
-import "./Home.css"; // Import the CSS file
+import "./Home.css";
+import LaptopSVG from "./LaptopSVG"; // Import the new component
 
-interface HomeProps {
-  message: string;
-}
-
-const Home: React.FC<HomeProps> = ({ message }) => {
+const Home: React.FC = () => {
   const [isDarkMode] = useDarkMode();
   const [name, setName] = useState(
-    "Hey, I am Kuldeep, <br /> Front End Developer based in Bali"
+    "Hey, I am Kuldeep, <br /> Front End Developer based in India"
   );
-  const displayedText = useTypingEffect(name, 75); // Use the custom hook
+  const displayedText = useTypingEffect(name, 75);
 
   return (
     <div
@@ -22,11 +19,14 @@ const Home: React.FC<HomeProps> = ({ message }) => {
       } flex items-center justify-center`}
     >
       <div>
-        <header className="mb-4 ">
+        <header className="mb-4 flex items-center">
           <h1
             className="text-4xl font-bold typing retro-text"
             dangerouslySetInnerHTML={{ __html: displayedText }}
           ></h1>
+          {displayedText.length === name.length && (
+            <LaptopSVG isDarkMode={isDarkMode} /> // Use the new component
+          )}
         </header>
 
         <div
@@ -38,6 +38,7 @@ const Home: React.FC<HomeProps> = ({ message }) => {
             href="https://github.com/vansadiak"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="GitHub"
           >
             <FaGithub className="h-6 w-6 transform transition-transform duration-200 hover:scale-125" />
           </a>
@@ -45,6 +46,7 @@ const Home: React.FC<HomeProps> = ({ message }) => {
             href="https://www.linkedin.com/in/kuldeep-vansadia-34b7631a6/"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="LinkedIn"
           >
             <FaLinkedin className="h-6 w-6 transform transition-transform duration-200 hover:scale-125" />
           </a>
@@ -52,6 +54,7 @@ const Home: React.FC<HomeProps> = ({ message }) => {
             href="https://drive.google.com/file/d/1uxu_EqkN9jOfwqq3-7kULUpw7CVo3zno/view?usp=drive_link"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Resume"
           >
             <FaFileAlt className="h-6 w-6 transform transition-transform duration-200 hover:scale-125" />
           </a>
