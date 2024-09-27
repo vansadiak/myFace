@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import useDarkMode from "../../hooks/useDarkMode";
 import useTypingEffect from "../../hooks/useTypingEffect";
 import { FaGithub, FaLinkedin, FaFileAlt } from "react-icons/fa";
+import { FaArrowDownShortWide } from "react-icons/fa6";
+import { HashLink } from "react-router-hash-link";
 import "./Home.css";
 import LaptopSVG from "./LaptopSVG"; // Import the new component
+import { AppRoutes } from "../App/AppRoutes";
 
 const Home: React.FC = () => {
   const [isDarkMode] = useDarkMode();
@@ -13,11 +16,7 @@ const Home: React.FC = () => {
   const displayedText = useTypingEffect(name, 75);
 
   return (
-    <div
-      className={`min-h-screen ${
-        isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"
-      } flex items-center justify-center`}
-    >
+    <div className="min-h-screen flex items-center justify-center">
       <div>
         <header className="mb-4 flex items-center px-4 md:px-0">
           <h1
@@ -59,7 +58,6 @@ const Home: React.FC = () => {
             <FaFileAlt className="h-6 w-6 transform transition-transform duration-200 hover:scale-125" />
           </a>
         </div>
-        <main></main>
       </div>
     </div>
   );
