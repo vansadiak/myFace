@@ -11,6 +11,7 @@ import useDarkMode from "../../hooks/useDarkMode";
 // Lazy load components
 const Home = lazy(() => import("../Home/Home"));
 const Contact = lazy(() => import("../ContactMe/Contact"));
+const Projects = lazy(() => import("../Projects/Projects"));
 
 interface RouteConfig {
   path: string;
@@ -20,6 +21,7 @@ interface RouteConfig {
 
 const routes: RouteConfig[] = [
   { path: "/", component: Home, label: "Home" },
+  { path: "/experience", component: Projects, label: "Experience" },
   { path: "/contact", component: Contact, label: "Contact" },
 ];
 
@@ -30,25 +32,57 @@ const AppContent: React.FC = () => {
   const [hasTyped, setHasTyped] = useState(false);
 
   useEffect(() => {
-    const handleScroll = (e: WheelEvent) => {
-      const currentIndex = routes.findIndex(
-        (route) => route.path === location.pathname
-      );
+    const SCROLL_THRESHOLD = 30;
+    let isNavigating = false;
 
-      if (e.deltaY > 0 && currentIndex < routes.length - 1) {
-        // Scrolling down
-        setTimeout(() => {
-          navigate(routes[currentIndex + 1].path);
-        }, 200);
-      } else if (e.deltaY < 0 && currentIndex > 0) {
-        // Scrolling up
-        setTimeout(() => {
-          navigate(routes[currentIndex - 1].path);
-        }, 200);
+    const handleScroll = (e: WheelEvent) => {
+      if (isNavigating) return;
+
+      const currentPath = location.pathname;
+
+      // Only handle scroll for home and contact pages
+      if (
+        currentPath !== "/" &&
+        currentPath !== "/contact" &&
+        currentPath !== "/experience"
+      )
+        return;
+
+      const element = e.target as Element;
+      const scrollableParent =
+        element.closest(".overflow-y-auto") || document.documentElement;
+
+      const isAtTop = scrollableParent.scrollTop === 0;
+      const isAtBottom =
+        Math.abs(
+          scrollableParent.scrollHeight -
+            scrollableParent.scrollTop -
+            scrollableParent.clientHeight
+        ) < 1;
+
+      if (Math.abs(e.deltaY) > SCROLL_THRESHOLD) {
+        // Home page - only allow scrolling down to Experience
+        if (currentPath === "/" && e.deltaY > 0 && isAtBottom) {
+          e.preventDefault();
+          isNavigating = true;
+          setTimeout(() => {
+            navigate("/experience");
+            isNavigating = false;
+          }, 200);
+        }
+        // Contact page - only allow scrolling up to Experience
+        else if (currentPath === "/contact" && e.deltaY < 0 && isAtTop) {
+          e.preventDefault();
+          isNavigating = true;
+          setTimeout(() => {
+            navigate("/experience");
+            isNavigating = false;
+          }, 200);
+        }
       }
     };
 
-    window.addEventListener("wheel", handleScroll);
+    window.addEventListener("wheel", handleScroll, { passive: false });
     return () => window.removeEventListener("wheel", handleScroll);
   }, [navigate, location.pathname]);
 
@@ -66,7 +100,13 @@ const AppContent: React.FC = () => {
           isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"
         }
       >
-        <nav className="fixed top-0 left-0 right-0 p-4 z-10 bg-opacity-90 backdrop-blur-sm">
+        <nav
+          className={`fixed top-0 left-0 right-0 p-4 z-50 transition-all duration-300  ${
+            isDarkMode
+              ? "bg-gray-900 shadow-gray-900/20"
+              : "bg-gray-100 backdrop-blur-sm"
+          }`}
+        >
           {routes.map((route, index) => (
             <button
               key={route.path}

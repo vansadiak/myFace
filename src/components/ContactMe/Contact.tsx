@@ -1,8 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import useDarkMode from "../../hooks/useDarkMode";
+import emailjs from "@emailjs/browser";
+
+// Replace hardcoded values with environment variables
+const SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID!;
+const ADMIN_TEMPLATE_ID = process.env.REACT_APP_EMAILJS_ADMIN_TEMPLATE_ID!;
+const RESPONSE_TEMPLATE_ID =
+  process.env.REACT_APP_EMAILJS_RESPONSE_TEMPLATE_ID!;
+const PUBLIC_KEY = process.env.REACT_APP_EMAILJS_PUBLIC_KEY!;
+
 const Contact: React.FC = () => {
   const [isDarkMode] = useDarkMode();
+  const [isLoading, setIsLoading] = useState(false);
+  const form = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -15,24 +26,42 @@ const Contact: React.FC = () => {
     >
   ) => {
     const { name, value } = e.target;
+    // Map EmailJS field names to our state properties
+    const fieldMapping: { [key: string]: string } = {
+      from_name: "fullName",
+      reply_to: "email",
+      message: "message",
+    };
+
     setFormData((prevState) => ({
       ...prevState,
-      [name]: value,
+      [fieldMapping[name] || name]: value,
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
+
     try {
-      const response = await fetch("/api/send-email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      if (response.ok) {
-        alert("Thank you for your message. We will get back to you soon!");
+      // Send notification to admin
+      const adminResult = await emailjs.sendForm(
+        SERVICE_ID,
+        ADMIN_TEMPLATE_ID,
+        form.current!,
+        PUBLIC_KEY
+      );
+
+      // Send auto-response to user
+      const userResult = await emailjs.sendForm(
+        SERVICE_ID,
+        RESPONSE_TEMPLATE_ID,
+        form.current!,
+        PUBLIC_KEY
+      );
+
+      if (adminResult.text === "OK" && userResult.text === "OK") {
+        alert("Thank you for your message. I will get back to you soon!");
         setFormData({
           fullName: "",
           email: "",
@@ -44,19 +73,24 @@ const Contact: React.FC = () => {
     } catch (error) {
       console.error("Error sending email:", error);
       alert("There was an error sending your message. Please try again later.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div
-      className={`min-h-screen ${
+      className={`min-h-screen relative ${
         isDarkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-black"
-      } flex items-center justify-center p-4`}
+      } flex items-center justify-center p-4 overflow-hidden`}
     >
       <style>{`
         input:-webkit-autofill,
         input:-webkit-autofill:hover,
-        input:-webkit-autofill:active {
+        input:-webkit-autofill:active,
+        textarea:-webkit-autofill,
+        textarea:-webkit-autofill:hover,
+        textarea:-webkit-autofill:active {
           -webkit-box-shadow: ${
             isDarkMode
               ? "0 0 0 30px rgb(31 41 55) inset !important"
@@ -70,8 +104,9 @@ const Contact: React.FC = () => {
             isDarkMode ? "rgb(31 41 55)" : "rgb(255 255 255)"
           } !important;
         }
-        
-        input:-webkit-autofill:focus {
+
+        input:-webkit-autofill:focus,
+        textarea:-webkit-autofill:focus {
           -webkit-box-shadow: ${
             isDarkMode
               ? "0 0 0 30px rgb(31 41 55) inset !important"
@@ -84,10 +119,22 @@ const Contact: React.FC = () => {
           background-color: ${
             isDarkMode ? "rgb(31 41 55)" : "rgb(255 255 255)"
           } !important;
-          outline: none !important;
+          outline: 2px solid ${isDarkMode ? "#4ECDC4" : "#FF6B6B"} !important;
+          outline-offset: -2px !important;
         }
       `}</style>
-      <div className="w-full m-16">
+
+      {/* Background GIF */}
+      <div className="absolute inset-0 w-full h-full">
+        <img
+          src="https://media.giphy.com/media/110dhxfJebYOTm/giphy.gif"
+          alt="Background animation"
+          className="w-full h-full object-cover opacity-5"
+        />
+      </div>
+
+      {/* Content container with relative positioning */}
+      <div className="relative z-10 w-full m-16">
         <div className="flex flex-col md:flex-row justify-between items-center mb-8">
           <div className="md:w-1/2 mb-6 md:mb-0 text-center md:text-left">
             <motion.h2
@@ -107,10 +154,14 @@ const Contact: React.FC = () => {
               Drop me a line! Let's make something awesome together.
             </motion.p>
           </div>
-          <form onSubmit={handleSubmit} className="w-full md:w-1/2 space-y-6">
+          <form
+            ref={form}
+            onSubmit={handleSubmit}
+            className="w-full md:w-1/2 space-y-6"
+          >
             <input
               type="text"
-              name="fullName"
+              name="from_name"
               value={formData.fullName}
               onChange={handleChange}
               placeholder="Enter Your Full Name"
@@ -123,7 +174,7 @@ const Contact: React.FC = () => {
             />
             <input
               type="email"
-              name="email"
+              name="reply_to"
               value={formData.email}
               onChange={handleChange}
               placeholder="Enter Your Email"
@@ -148,13 +199,21 @@ const Contact: React.FC = () => {
             ></textarea>
             <button
               type="submit"
+              disabled={isLoading}
               className={`w-full p-3 rounded-lg transition duration-300 font-medium text-base ${
                 isDarkMode
                   ? "bg-[#4ECDC4] text-white hover:bg-[#45b8b0]"
                   : "bg-[#FF6B6B] text-white hover:bg-[#ff5252]"
-              }`}
+              } ${isLoading ? "opacity-70 cursor-not-allowed" : ""}`}
             >
-              Let's Work Together
+              {isLoading ? (
+                <div className="flex items-center justify-center">
+                  <div className="w-5 h-5 border-t-2 border-b-2 border-white rounded-full animate-spin mr-2"></div>
+                  Sending...
+                </div>
+              ) : (
+                "Let's Work Together"
+              )}
             </button>
           </form>
         </div>
