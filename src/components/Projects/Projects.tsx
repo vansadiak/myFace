@@ -50,7 +50,7 @@ const Achievement: React.FC<{
   isDarkMode: boolean;
 }> = ({ achievement, isDarkMode }) => (
   <p
-    className={`text-base leading-relaxed ${
+    className={`text-sm md:text-base leading-relaxed ${
       isDarkMode ? "text-gray-300" : "text-gray-700"
     }`}
   >
@@ -92,7 +92,7 @@ export const Projects: React.FC = () => {
       {/* Content container with relative positioning to appear above the background */}
       <div className="relative z-10 max-w-5xl mx-auto">
         <motion.h2
-          className={`text-4xl md:text-5xl font-medium tracking-tight leading-tight mb-16 ${
+          className={`text-2xl md:text-5xl font-medium tracking-tight leading-tight mb-6 md:mb-16 ${
             isDarkMode ? "text-white" : "text-black"
           }`}
           initial={{ opacity: 0, y: -20 }}
@@ -102,7 +102,7 @@ export const Projects: React.FC = () => {
           Experience
         </motion.h2>
 
-        <div className="space-y-24">
+        <div className="space-y-8 md:space-y-24">
           {projectData.map((project, index) => (
             <ProjectCard
               key={`${project.company}-${project.period.start}`}
@@ -134,34 +134,34 @@ const ProjectCard: React.FC<{
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
       transition={{ duration: 0.5, delay: 0.2 }}
     >
-      <div className="flex flex-col space-y-6">
-        <div className="flex flex-col space-y-1">
-          <div className="flex items-baseline justify-between">
+      <div className="flex flex-col space-y-3 md:space-y-6">
+        <div className="flex flex-col space-y-1 md:space-y-2">
+          <div className="flex flex-col md:flex-row md:items-baseline md:justify-between gap-1 md:gap-0">
             <h3
-              className={`text-2xl font-medium ${
+              className={`text-lg md:text-2xl font-medium ${
                 isDarkMode ? "text-[#4ECDC4]" : "text-[#FF6B6B]"
               }`}
             >
               {project.role}
             </h3>
             <span
-              className={`text-sm ${
+              className={`text-[0.7rem] md:text-sm ${
                 isDarkMode ? "text-gray-300" : "text-gray-600"
               }`}
             >
               {project.period.start} — {project.period.end}
             </span>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex flex-col md:flex-row md:items-center gap-0.5 md:gap-2">
             <span
-              className={`text-lg ${
+              className={`text-sm md:text-lg ${
                 isDarkMode ? "text-gray-300" : "text-gray-700"
               }`}
             >
               <TextContent content={project.company} />
             </span>
             <span
-              className={`text-sm ${
+              className={`text-[0.7rem] md:text-sm ${
                 isDarkMode ? "text-gray-400" : "text-gray-600"
               }`}
             >
@@ -170,7 +170,7 @@ const ProjectCard: React.FC<{
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-2 md:space-y-4">
           {project.achievements.map((achievement, i) => (
             <Achievement
               key={i}
@@ -180,11 +180,11 @@ const ProjectCard: React.FC<{
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-2 mt-4">
+        <div className="flex flex-wrap gap-1 md:gap-2 mt-1 md:mt-4">
           {project.technologies.map((tech, i) => (
             <span
               key={i}
-              className={`px-3 py-1 text-sm rounded-full transform transition-transform duration-200 hover:scale-110 ${
+              className={`px-1.5 md:px-3 py-0.5 md:py-1 text-[0.65rem] md:text-sm rounded-full transform transition-transform duration-200 hover:scale-110 ${
                 isDarkMode
                   ? "bg-gray-800 text-[#4ECDC4] border border-[#4ECDC4]/20"
                   : "bg-gray-50 text-[#FF6B6B] border border-[#FF6B6B]/20"
