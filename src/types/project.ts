@@ -27,7 +27,7 @@ export const projectData: Project[] = [
     location: "REMOTE, IN",
     achievements: [
       [
-        "Leading a team of three in the development of a comprehensive Planning app for planners in apparel industry ( Available on ",
+        "Leading a team of three in the development of a comprehensive Planning app for planners in apparel industry (Available on ",
         {
           href: "https://play.google.com/store/apps/details?id=com.solvei8.tna.updates&hl=en",
           text: "Play Store",
