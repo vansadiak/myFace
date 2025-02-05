@@ -79,10 +79,11 @@ export const Projects: React.FC = () => {
       } py-20 px-4 md:px-8 overflow-hidden`}
     >
       {/* Background GIF */}
-      <div className="absolute inset-0 w-full h-full z-0">
+      <div className="absolute inset-0 w-full h-full z-0 select-none">
         <img
           src="https://media.giphy.com/media/xT5LMDYj4kvKNlGDHq/giphy.gif"
           alt="Background animation"
+          draggable="false"
           className={`w-full h-full object-cover transition-opacity duration-500 ${
             isScrolled ? "opacity-5" : "opacity-0"
           }`}

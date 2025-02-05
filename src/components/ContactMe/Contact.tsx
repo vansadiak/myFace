@@ -125,10 +125,11 @@ const Contact: React.FC = () => {
       `}</style>
 
       {/* Background GIF */}
-      <div className="absolute inset-0 w-full h-full">
+      <div className="absolute inset-0 w-full h-full select-none">
         <img
           src="https://media.giphy.com/media/110dhxfJebYOTm/giphy.gif"
           alt="Background animation"
+          draggable="false"
           className="w-full h-full object-cover opacity-5"
         />
       </div>
