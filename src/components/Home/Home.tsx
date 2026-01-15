@@ -19,7 +19,7 @@ const Home: React.FC = () => {
       } flex items-center justify-center`}
     >
       <div>
-        <header className="mb-4 flex items-center">
+        <header className="mb-4 flex items-center px-4 md:px-0">
           <h1
             className="text-4xl font-bold typing retro-text"
             dangerouslySetInnerHTML={{ __html: displayedText }}
