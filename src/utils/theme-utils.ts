@@ -1,56 +1,54 @@
 interface ThemeColors {
-  primary: {
-    dark: string;
-    light: string;
-    hoverDark: string;
-    hoverLight: string;
-  };
+  primary: string;
   background: {
     dark: string;
     light: string;
   };
-  secondary: {
+  text: {
     dark: string;
     light: string;
   };
-  accent: {
+  border: {
     dark: string;
     light: string;
   };
 }
 
-// Single source of truth for all theme colors
+// Brutalist color scheme - monochrome + red accent
 export const themeColors: ThemeColors = {
-  primary: {
-    dark: "#4ECDC4", // teal
-    light: "#FF6B6B", // coral
-    hoverDark: "#45b8b0",
-    hoverLight: "#ff5252",
-  },
+  primary: "#FF0000", // red accent - same for both modes
   background: {
-    dark: "#111827", // gray-900
-    light: "#F9FAFB", // gray-50
+    dark: "#000000", // pure black
+    light: "#FFFFFF", // pure white
   },
-  secondary: {
-    dark: "#1F2937", // gray-800
-    light: "#FFFFFF", // white
+  text: {
+    dark: "#FFFFFF", // white text on dark
+    light: "#000000", // black text on light
   },
-  accent: {
-    dark: "#374151", // gray-700
-    light: "#F3F4F6", // gray-100
+  border: {
+    dark: "#FFFFFF", // white borders on dark
+    light: "#000000", // black borders on light
   },
-} as const; // Make it readonly
+} as const;
 
-export const getThemeClasses = (isDarkMode: boolean) => ({
-  background: isDarkMode ? "bg-background-dark" : "bg-background-light",
+export interface ThemeClasses {
+  background: string;
+  text: string;
+  border: string;
+  accent: string;
+  accentBg: string;
+  accentBorder: string;
+  accentHover: string;
+  inputBg: string;
+}
+
+export const getThemeClasses = (isDarkMode: boolean): ThemeClasses => ({
+  background: isDarkMode ? "bg-black" : "bg-white",
   text: isDarkMode ? "text-white" : "text-black",
-  primary: isDarkMode ? "text-primary-dark" : "text-primary-light",
-  primaryBg: isDarkMode ? "bg-primary-dark" : "bg-primary-light",
-  primaryBorder: isDarkMode ? "border-primary-dark" : "border-primary-light",
-  primaryHover: isDarkMode
-    ? "hover:text-primary-hover-dark"
-    : "hover:text-primary-hover-light",
-  secondary: isDarkMode ? "bg-secondary-dark" : "bg-secondary-light",
-  accent: isDarkMode ? "bg-accent-dark" : "bg-accent-light",
-  neutralBg: isDarkMode ? "bg-gray-800" : "bg-gray-200",
+  border: isDarkMode ? "border-white" : "border-black",
+  accent: "text-accent",
+  accentBg: "bg-accent",
+  accentBorder: "border-accent",
+  accentHover: "hover:border-accent hover:text-accent",
+  inputBg: isDarkMode ? "bg-black" : "bg-white",
 });
