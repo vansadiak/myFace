@@ -13,9 +13,27 @@ interface HomeProps {
 const Home: React.FC<HomeProps> = ({ hasTyped, setHasTyped }) => {
   const [isDarkMode] = useDarkMode();
   const [name] = useState(
-    "Hey, I am Kuldeep, <br /> Front End Developer based in India"
+    "I am Kuldeep, <br /> Front End Developer based in India"
   );
+  const [showGif, setShowGif] = useState(false);
   const displayedText = useTypingEffect(name, 75, !hasTyped);
+
+  // Handle mouse movement
+  useEffect(() => {
+    const handleMouseMove = () => {
+      setShowGif(true);
+      // Reset gif visibility after 2 seconds
+      setTimeout(() => setShowGif(false), 2500);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  // Show gif when text is changing
+  useEffect(() => {
+    setShowGif(displayedText.length !== name.length);
+  }, [displayedText, name.length]);
 
   useEffect(() => {
     if (displayedText.length === name.length) {
@@ -24,8 +42,19 @@ const Home: React.FC<HomeProps> = ({ hasTyped, setHasTyped }) => {
   }, [displayedText, name.length, setHasTyped]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div>
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+      {showGif && (
+        <div className="absolute inset-0 w-full h-full">
+          <img
+            src="https://media.giphy.com/media/xTkcEQACH24SMPxIQg/giphy.gif"
+            alt="Background animation"
+            className="w-full h-full object-cover opacity-200"
+          />
+        </div>
+      )}
+
+      {/* Content container with relative positioning */}
+      <div className="relative z-10">
         <header className="mb-4 flex flex-col px-4 md:px-0">
           <div className="text-4xl md:text-5xl font-medium tracking-tight leading-tight">
             <span

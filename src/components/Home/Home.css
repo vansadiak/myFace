@@ -37,3 +37,7 @@
     opacity: 0;
   }
 }
+
+.opacity-200 {
+  opacity: 0.05;
+}
