@@ -74,10 +74,63 @@ const TimelineProject: React.FC<{
 
       {/* Project content */}
       <motion.div
-        className={`p-6 rounded-lg ${themeClasses.secondary} backdrop-blur-sm shadow-lg`}
-        whileHover={{ x: 10 }}
+        className={`p-6 rounded-lg relative overflow-hidden group`}
+        style={{
+          background: isDarkMode
+            ? "rgba(31, 41, 55, 0.7)"
+            : "rgba(255, 255, 255, 0.8)",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+          border: isDarkMode
+            ? "1px solid rgba(78, 205, 196, 0.2)"
+            : "1px solid rgba(255, 107, 107, 0.2)",
+          boxShadow: isDarkMode
+            ? "0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(78, 205, 196, 0.1)"
+            : "0 8px 32px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 107, 107, 0.1)",
+        }}
+        whileHover={{
+          x: 10,
+          scale: 1.02,
+          rotateY: 5,
+          rotateX: -2,
+          borderColor: isDarkMode
+            ? "rgba(78, 205, 196, 0.4)"
+            : "rgba(255, 107, 107, 0.4)",
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 300,
+          damping: 20,
+        }}
       >
-        <div className="mb-4">
+        {/* Glow effect on hover */}
+        <motion.div
+          className="absolute inset-0 opacity-0 rounded-lg"
+          style={{
+            background: isDarkMode
+              ? "radial-gradient(circle at center, rgba(78, 205, 196, 0.1), transparent 70%)"
+              : "radial-gradient(circle at center, rgba(255, 107, 107, 0.1), transparent 70%)",
+          }}
+          whileHover={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+        />
+
+        {/* Project image if available */}
+        {project.imageUrl && (
+          <motion.div
+            className="mb-4 rounded-lg overflow-hidden"
+            initial={{ opacity: 0, y: -10 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
+            transition={{ delay: 0.2 }}
+          >
+            <img
+              src={project.imageUrl}
+              alt={`${project.company.text} preview`}
+              className="w-full h-48 object-cover rounded-lg"
+            />
+          </motion.div>
+        )}
+        <div className="mb-4 relative z-10">
           <motion.div
             className={`text-sm font-mono mb-2 ${themeClasses.primary}`}
           >
@@ -90,7 +143,7 @@ const TimelineProject: React.FC<{
         </div>
 
         {/* Achievements */}
-        <motion.div className="space-y-3">
+        <motion.div className="space-y-3 relative z-10">
           {(isExpanded
             ? project.achievements
             : project.achievements.slice(0, 2)
@@ -126,15 +179,31 @@ const TimelineProject: React.FC<{
         </motion.div>
 
         {/* Tech stack */}
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-4 flex flex-wrap gap-2 relative z-10">
           {project.technologies.map((tech, i) => (
             <motion.span
               key={i}
-              className={`px-2 py-1 text-xs rounded-full ${themeClasses.accent} ${themeClasses.primary}`}
+              className={`px-2 py-1 text-xs rounded-full ${themeClasses.accent} ${themeClasses.primary} cursor-default relative inline-block`}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 + i * 0.05 }}
-              whileHover={{ scale: 1.1 }}
+              whileHover={{
+                scale: [1, 1.3, 1.2],
+                rotate: [0, -5, 5, 0],
+                filter: isDarkMode
+                  ? "drop-shadow(0 4px 12px rgba(78, 205, 196, 0.4))"
+                  : "drop-shadow(0 4px 12px rgba(255, 107, 107, 0.4))",
+                transition: {
+                  type: "spring",
+                  stiffness: 500,
+                  damping: 15,
+                },
+              }}
+              style={{
+                filter: isDarkMode
+                  ? "drop-shadow(0 0 0px rgba(78, 205, 196, 0))"
+                  : "drop-shadow(0 0 0px rgba(255, 107, 107, 0))",
+              }}
             >
               {tech}
             </motion.span>

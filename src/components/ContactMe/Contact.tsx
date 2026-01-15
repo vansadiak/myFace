@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import useDarkMode from "../../hooks/useDarkMode";
 import { getThemeClasses } from "../../utils/theme-utils";
 import emailjs from "@emailjs/browser";
+import Confetti from "../Animations/Confetti";
 
 // Environment variables
 const SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID!;
@@ -14,8 +15,10 @@ const PUBLIC_KEY = process.env.REACT_APP_EMAILJS_PUBLIC_KEY!;
 const Contact: React.FC = () => {
   const [isDarkMode] = useDarkMode();
   const [isLoading, setIsLoading] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
   const form = useRef<HTMLFormElement>(null);
   const themeClasses = getThemeClasses(isDarkMode);
+  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -63,12 +66,15 @@ const Contact: React.FC = () => {
       ]);
 
       if (adminResult.text === "OK" && userResult.text === "OK") {
-        alert("Thank you for your message. I will get back to you soon!");
-        setFormData({
-          fullName: "",
-          email: "",
-          message: "",
-        });
+        setShowConfetti(true);
+        setTimeout(() => {
+          alert("Thank you for your message. I will get back to you soon!");
+          setFormData({
+            fullName: "",
+            email: "",
+            message: "",
+          });
+        }, 500);
       } else {
         throw new Error("Failed to send email");
       }
@@ -80,21 +86,25 @@ const Contact: React.FC = () => {
     }
   };
 
-  const inputClasses = `w-full p-2.5 md:p-3 rounded-lg font-normal 
+  const inputClasses = `w-full p-2.5 md:p-3 rounded-lg font-normal relative border-2
     ${
       isDarkMode
-        ? `${themeClasses.secondary} text-white`
-        : "bg-white text-black border border-gray-200"
+        ? `${themeClasses.secondary} text-white border-gray-700`
+        : "bg-white text-black border-gray-200"
     } 
-    focus:outline-none focus:ring-2 focus:ring-primary-${
-      isDarkMode ? "dark" : "light"
-    } 
-    transition-colors duration-200`;
+    focus:outline-none 
+    transition-all duration-300`;
 
   return (
     <div
       className={`min-h-screen relative ${themeClasses.background} ${themeClasses.text} flex items-center justify-center p-4 overflow-hidden`}
     >
+      {showConfetti && (
+        <Confetti
+          isDarkMode={isDarkMode}
+          onComplete={() => setShowConfetti(false)}
+        />
+      )}
       <style>{`
         input:-webkit-autofill,
         input:-webkit-autofill:hover,
@@ -168,55 +178,152 @@ const Contact: React.FC = () => {
               Drop me a line! Let's make something awesome together.
             </motion.p>
           </div>
-          <form
+          <motion.form
             ref={form}
             onSubmit={handleSubmit}
             className="w-full md:w-1/2 space-y-4 md:space-y-6"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
           >
-            <input
-              type="text"
-              name="from_name"
-              value={formData.fullName}
-              onChange={handleChange}
-              placeholder="Enter Your Full Name"
-              className={inputClasses}
-              required
-            />
-            <input
-              type="email"
-              name="reply_to"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter Your Email"
-              className={inputClasses}
-              required
-            />
-            <textarea
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              placeholder="How Can I Help You?"
-              className={`${inputClasses} h-32`}
-              required
-            />
-            <button
+            <motion.div className="relative">
+              <motion.input
+                type="text"
+                name="from_name"
+                value={formData.fullName}
+                onChange={handleChange}
+                onFocus={() => setFocusedField("fullName")}
+                onBlur={() => setFocusedField(null)}
+                placeholder="Enter Your Full Name"
+                className={inputClasses}
+                required
+                animate={{
+                  scale: focusedField === "fullName" ? 1.02 : 1,
+                  borderColor: focusedField === "fullName" 
+                    ? (isDarkMode ? "#4ECDC4" : "#FF6B6B")
+                    : (isDarkMode ? "#374151" : "#e5e7eb"),
+                }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              />
+              <motion.div
+                className="absolute bottom-0 left-0 h-0.5"
+                style={{
+                  background: isDarkMode
+                    ? "linear-gradient(to right, transparent, #4ECDC4, transparent)"
+                    : "linear-gradient(to right, transparent, #FF6B6B, transparent)",
+                }}
+                animate={{
+                  width: focusedField === "fullName" ? "100%" : "0%",
+                }}
+                transition={{ duration: 0.3 }}
+              />
+            </motion.div>
+            <motion.div className="relative">
+              <motion.input
+                type="email"
+                name="reply_to"
+                value={formData.email}
+                onChange={handleChange}
+                onFocus={() => setFocusedField("email")}
+                onBlur={() => setFocusedField(null)}
+                placeholder="Enter Your Email"
+                className={inputClasses}
+                required
+                animate={{
+                  scale: focusedField === "email" ? 1.02 : 1,
+                  borderColor: focusedField === "email"
+                    ? (isDarkMode ? "#4ECDC4" : "#FF6B6B")
+                    : (isDarkMode ? "#374151" : "#e5e7eb"),
+                }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              />
+              <motion.div
+                className="absolute bottom-0 left-0 h-0.5"
+                style={{
+                  background: isDarkMode
+                    ? "linear-gradient(to right, transparent, #4ECDC4, transparent)"
+                    : "linear-gradient(to right, transparent, #FF6B6B, transparent)",
+                }}
+                animate={{
+                  width: focusedField === "email" ? "100%" : "0%",
+                }}
+                transition={{ duration: 0.3 }}
+              />
+            </motion.div>
+            <motion.div className="relative">
+              <motion.textarea
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                onFocus={() => setFocusedField("message")}
+                onBlur={() => setFocusedField(null)}
+                placeholder="How Can I Help You?"
+                className={`${inputClasses} h-32 resize-none`}
+                required
+                animate={{
+                  scale: focusedField === "message" ? 1.02 : 1,
+                  borderColor: focusedField === "message"
+                    ? (isDarkMode ? "#4ECDC4" : "#FF6B6B")
+                    : (isDarkMode ? "#374151" : "#e5e7eb"),
+                }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              />
+              <motion.div
+                className="absolute bottom-0 left-0 h-0.5"
+                style={{
+                  background: isDarkMode
+                    ? "linear-gradient(to right, transparent, #4ECDC4, transparent)"
+                    : "linear-gradient(to right, transparent, #FF6B6B, transparent)",
+                }}
+                animate={{
+                  width: focusedField === "message" ? "100%" : "0%",
+                }}
+                transition={{ duration: 0.3 }}
+              />
+            </motion.div>
+            <motion.button
               type="submit"
               disabled={isLoading}
-              className={`w-full p-3 rounded-lg transition duration-300 font-medium text-base 
-                bg-primary-${isDarkMode ? "dark" : "light"} 
-                hover:bg-primary-hover-${isDarkMode ? "dark" : "light"} 
-                text-white ${isLoading ? "opacity-70 cursor-not-allowed" : ""}`}
+              className={`w-full p-3 rounded-lg font-medium text-base relative overflow-hidden
+                ${isDarkMode ? "bg-primary-dark" : "bg-primary-light"}
+                text-white ${isLoading ? "opacity-70 cursor-not-allowed" : "cursor-pointer"}`}
+              whileHover={!isLoading ? {
+                scale: 1.05,
+                boxShadow: isDarkMode
+                  ? "0 10px 30px rgba(78, 205, 196, 0.4)"
+                  : "0 10px 30px rgba(255, 107, 107, 0.4)",
+              } : {}}
+              whileTap={!isLoading ? { scale: 0.98 } : {}}
+              transition={{
+                type: "spring",
+                stiffness: 400,
+                damping: 17,
+              }}
             >
+              <motion.div
+                className="absolute inset-0 opacity-0"
+                style={{
+                  background: isDarkMode
+                    ? "linear-gradient(135deg, rgba(78, 205, 196, 0.3), rgba(78, 205, 196, 0.1))"
+                    : "linear-gradient(135deg, rgba(255, 107, 107, 0.3), rgba(255, 107, 107, 0.1))",
+                }}
+                whileHover={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              />
               {isLoading ? (
-                <div className="flex items-center justify-center">
-                  <div className="w-5 h-5 border-t-2 border-b-2 border-white rounded-full animate-spin mr-2"></div>
+                <div className="flex items-center justify-center relative z-10">
+                  <motion.div
+                    className="w-5 h-5 border-t-2 border-b-2 border-white rounded-full mr-2"
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                  />
                   Sending...
                 </div>
               ) : (
-                "Let's Work Together"
+                <span className="relative z-10">Let's Work Together</span>
               )}
-            </button>
-          </form>
+            </motion.button>
+          </motion.form>
         </div>
       </div>
     </div>

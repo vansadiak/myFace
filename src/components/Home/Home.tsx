@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import { motion } from "framer-motion";
 import useDarkMode from "../../hooks/useDarkMode";
 import useTypingEffect from "../../hooks/useTypingEffect";
-import { FaGithub, FaLinkedin, FaFileAlt, FaEnvelope } from "react-icons/fa";
+import { FaFileAlt, FaGithub, FaLinkedin } from "react-icons/fa";
 import { getThemeClasses } from "../../utils/theme-utils";
 import LaptopSVG from "./LaptopSVG";
-import { getIntroText, socialLinks, cvDownloadLink } from "../../types/me";
+import { getIntroText, socialLinks } from "../../types/me";
+import ParticleSystem from "../Particles/ParticleSystem";
+import FloatingTechTags from "../Particles/FloatingTechTags";
 
 interface HomeProps {
   hasTyped: boolean;
@@ -14,9 +17,14 @@ interface HomeProps {
 const Home: React.FC<HomeProps> = ({ hasTyped, setHasTyped }) => {
   const [isDarkMode] = useDarkMode();
   const themeClasses = getThemeClasses(isDarkMode);
-  const [name] = useState(getIntroText(isDarkMode));
+  const name = useMemo(() => getIntroText(isDarkMode), [isDarkMode]);
   const [showGif, setShowGif] = useState(false);
   const displayedText = useTypingEffect(name, 60, !hasTyped);
+
+  // Reset typing when theme changes
+  useEffect(() => {
+    setHasTyped(false);
+  }, [isDarkMode, setHasTyped]);
 
   // Handle mouse movement
   useEffect(() => {
@@ -47,8 +55,10 @@ const Home: React.FC<HomeProps> = ({ hasTyped, setHasTyped }) => {
     <div
       className={`h-screen flex flex-col relative overflow-hidden ${themeClasses.background} ${themeClasses.text}`}
     >
+      <ParticleSystem isDarkMode={isDarkMode} particleCount={40} />
+      <FloatingTechTags isDarkMode={isDarkMode} />
       {showGif && (
-        <div className="absolute inset-0 w-full h-full select-none">
+        <div className="absolute inset-0 w-full h-full select-none z-0">
           <img
             src="https://media.giphy.com/media/xTkcEQACH24SMPxIQg/giphy.gif"
             alt="Background animation"
@@ -77,48 +87,62 @@ const Home: React.FC<HomeProps> = ({ hasTyped, setHasTyped }) => {
             </div>
           </header>
 
-          <div
+          <motion.div
             className={`flex justify-center space-x-4 mt-8 transition-opacity duration-1000 ${
               displayedText.length === name.length
                 ? "opacity-100"
                 : "opacity-25"
             }`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={
+              displayedText.length === name.length
+                ? { opacity: 1, y: 0 }
+                : { opacity: 0.25, y: 20 }
+            }
+            transition={{ duration: 0.5, delay: 0.3 }}
           >
-            {socialLinks.map(({ href, iconName, label }) => {
-              const iconMap = {
-                github: FaGithub,
-                linkedin: FaLinkedin,
-                resume: FaFileAlt,
-              };
-              const Icon = iconMap[iconName];
-              return (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={label}
-                  className={`${themeClasses.primary} ${themeClasses.primaryHover}`}
-                >
-                  <Icon className="h-6 w-6 transform transition-transform duration-200 hover:scale-125" />
-                </a>
-              );
-            })}
-          </div>
+            {socialLinks
+              .filter((link) => link.iconName !== "resume")
+              .map(({ href, iconName, label }) => {
+                const iconMap = {
+                  github: FaGithub,
+                  linkedin: FaLinkedin,
+                  resume: FaFileAlt,
+                };
+                const Icon = iconMap[iconName];
+                return (
+                  <motion.a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    className={`${themeClasses.primary} ${themeClasses.primaryHover} relative`}
+                    whileHover={{ scale: 1.3, rotate: [0, -10, 10, -10, 0] }}
+                    whileTap={{ scale: 0.9 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 400,
+                      damping: 17,
+                    }}
+                  >
+                    <motion.div
+                      className="absolute inset-0 rounded-full"
+                      style={{
+                        boxShadow: isDarkMode
+                          ? "0 0 20px rgba(78, 205, 196, 0.5)"
+                          : "0 0 20px rgba(255, 107, 107, 0.5)",
+                      }}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileHover={{ opacity: 1, scale: 1.5 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                    <Icon className="h-6 w-6 relative z-10" />
+                  </motion.a>
+                );
+              })}
+          </motion.div>
         </div>
-      </div>
-
-      {/* Footer - 10vh */}
-      <div className="h-[10vh] flex items-center justify-center relative z-10 mb-10">
-        <a
-          href={cvDownloadLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${themeClasses.primary} ${themeClasses.primaryHover} hover:shadow-xl border-2 ${themeClasses.primary} flex items-center space-x-3`}
-        >
-          <FaEnvelope className="h-5 w-5" />
-          <span>Download CV/Resume</span>
-        </a>
       </div>
     </div>
   );

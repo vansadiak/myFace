@@ -5,7 +5,7 @@ export type LinkObject = { href: string; text: string };
 export type TextWithLinks = string | LinkObject | Array<string | LinkObject>;
 
 export interface Project {
-  company: TextWithLinks;
+  company: LinkObject;
   role: string;
   period: {
     start: string;
@@ -14,13 +14,14 @@ export interface Project {
   location: string;
   achievements: TextWithLinks[]; // Array of TextWithLinks
   technologies: string[];
+  imageUrl?: string; // Optional preview image URL
 }
 
 export const projectData: Project[] = [
   {
     company: {
       href: "https://solvei8.com",
-      text: "SOLVEI8"
+      text: "SOLVEI8",
     },
     role: "LEAD ENGINEER",
     period: {
@@ -40,17 +41,27 @@ export const projectData: Project[] = [
           href: "https://apps.apple.com/in/app/maintaini8/id1666505304",
           text: "App Store",
         },
-        "), overseeing the complete development lifecycle of Maintaini8, a full-fledged machine maintenance tool featuring inventory management, downtime tracking, automated breakdown assignments, preventive maintenance, and real-time analytics"
+        "), overseeing the complete development lifecycle of Maintaini8, a full-fledged machine maintenance tool featuring inventory management, downtime tracking, automated breakdown assignments, preventive maintenance, and real-time analytics",
       ],
 
       "Led comprehensive monorepo migration from Angular 14 to 16, including Ionic framework upgrades and Nx workspace migration, ensuring seamless transition while maintaining application stability and performance across multiple projects",
     ],
-    technologies: ["Full Stack", "Scala","Angular","React","Typescript","Team Leadership", "Backend", "Frontend", "Architecture"],
+    technologies: [
+      "Full Stack",
+      "Scala",
+      "Angular",
+      "React",
+      "Typescript",
+      "Team Leadership",
+      "Backend",
+      "Frontend",
+      "Architecture",
+    ],
   },
   {
     company: {
       href: "https://solvei8.com",
-      text: "SOLVEI8"
+      text: "SOLVEI8",
     },
     role: "SENIOR FRONT END DEVELOPER",
     period: {
@@ -75,12 +86,20 @@ export const projectData: Project[] = [
       "Spearheaded the expansion and introduction of the UI library in our Monorepo at Solvei8, introducing dynamic forms, tables, and charting elements to provide a standardized and scalable user interface for various applications. Also introduced and developed typing, services and utils library. This reduced the dev effort by 60-80%, production bug rates decreased by 50%, improved UX across applications, reduced dev testing by 40% and improved code quality and maintainability.",
       "Successfully migrated legacy applications (angular 5) into a Monorepo like Tv dashboard which included real time dashboard with Websocket connections (whose support was not present in Monorepo) amongst other complex applications. This made sure that feature development time reduced by 80-90% for migrated applications, Production bug rates decreased by more than 95%.",
     ],
-    technologies: ["Angular", "Ionic", "Typescript", "D3", "RxJS","React","Monorepo"],
+    technologies: [
+      "Angular",
+      "Ionic",
+      "Typescript",
+      "D3",
+      "RxJS",
+      "React",
+      "Monorepo",
+    ],
   },
   {
     company: {
       href: "https://solvei8.com",
-      text: "SOLVEI8 (ex ZILINGO)"
+      text: "SOLVEI8 (ex ZILINGO)",
     },
     role: "FRONT END DEVELOPER",
     period: {
@@ -109,7 +128,7 @@ export const projectData: Project[] = [
   {
     company: {
       href: "https://zeotap.com",
-      text: "ZEOTAP"
+      text: "ZEOTAP",
     },
     role: "DATA SCIENCE, CO-OP",
     period: {
