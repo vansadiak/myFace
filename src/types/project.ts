@@ -40,11 +40,10 @@ export const projectData: Project[] = [
           href: "https://apps.apple.com/in/app/maintaini8/id1666505304",
           text: "App Store",
         },
-        ")",
+        "), overseeing the complete development lifecycle of Maintaini8, a full-fledged machine maintenance tool featuring inventory management, downtime tracking, automated breakdown assignments, preventive maintenance, and real-time analytics"
       ],
-      "Overseeing the complete development lifecycle of Maintaini8, a full-fledged machine maintenance tool featuring inventory management, downtime tracking, automated breakdown assignments, preventive maintenance, and real-time analytics",
-      "Collaborating with cross-functional teams to define technical requirements and architectural decisions for scalable maintenance solutions",
-      "Mentoring team members and implementing best practices for code quality and development processes across the full-stack application",
+
+      "Led comprehensive monorepo migration from Angular 14 to 16, including Ionic framework upgrades and Nx workspace migration, ensuring seamless transition while maintaining application stability and performance across multiple projects",
     ],
     technologies: ["Full Stack", "Scala","Angular","React","Typescript","Team Leadership", "Backend", "Frontend", "Architecture"],
   },
