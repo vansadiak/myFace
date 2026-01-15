@@ -1,12 +1,15 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { themeColors } from "../../utils/theme-utils";
 
 interface LaptopSVGProps {
   isDarkMode: boolean;
 }
 
 const LaptopSVG: React.FC<LaptopSVGProps> = ({ isDarkMode }) => {
-  const themeColor = isDarkMode ? "#4ECDC4" : "#FF6B6B";
+  const themeColor = isDarkMode
+    ? themeColors.primary.dark
+    : themeColors.primary.light;
 
   return (
     <motion.svg
