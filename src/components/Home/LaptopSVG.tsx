@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 
 interface LaptopSVGProps {
@@ -6,17 +6,19 @@ interface LaptopSVGProps {
 }
 
 const LaptopSVG: React.FC<LaptopSVGProps> = ({ isDarkMode }) => {
+  const themeColor = isDarkMode ? "#4ECDC4" : "#FF6B6B";
+
   return (
     <motion.svg
-      className={`ml-4 h-16 w-16 ${isDarkMode ? "svg-dark" : "svg-light"}`}
+      className="ml-4 h-16 w-16"
       viewBox="0 0 100 100"
-      initial={{ rotate: 0, opacity: 1 }} // Initial state
-      animate={{ rotate: 0, opacity: 1 }} // Animate back to initial state
+      initial={{ rotate: 0, opacity: 1 }}
+      animate={{ rotate: 0, opacity: 1 }}
       whileHover={{
-        rotate: [0, 360, 800, 2000], // Rotates faster and faster
-        opacity: [1, 1, 0], // Disappears
+        rotate: [0, 360, 800, 2000],
+        opacity: [1, 1, 0],
         transition: {
-          duration: 2, // Total duration of the hover effect
+          duration: 2,
           ease: "easeInOut",
         },
       }}
@@ -28,7 +30,7 @@ const LaptopSVG: React.FC<LaptopSVGProps> = ({ isDarkMode }) => {
         width="80"
         height="6"
         rx="2"
-        fill="currentColor"
+        fill={themeColor}
         initial={{ scaleX: 0 }}
         animate={{ scaleX: 1 }}
         transition={{ duration: 0.5 }}
@@ -42,7 +44,7 @@ const LaptopSVG: React.FC<LaptopSVGProps> = ({ isDarkMode }) => {
         height="50"
         rx="2"
         fill="none"
-        stroke="currentColor"
+        stroke={themeColor}
         strokeWidth="2"
         initial={{ scaleY: 0 }}
         animate={{ scaleY: 1 }}
@@ -55,7 +57,7 @@ const LaptopSVG: React.FC<LaptopSVGProps> = ({ isDarkMode }) => {
         y1="30"
         x2="55"
         y2="30"
-        stroke="currentColor"
+        stroke={themeColor}
         strokeWidth="2"
         initial={{ pathLength: 0 }}
         animate={{ pathLength: 1 }}
@@ -72,7 +74,7 @@ const LaptopSVG: React.FC<LaptopSVGProps> = ({ isDarkMode }) => {
         y1="40"
         x2="65"
         y2="40"
-        stroke="currentColor"
+        stroke={themeColor}
         strokeWidth="2"
         initial={{ pathLength: 0 }}
         animate={{ pathLength: 1 }}
@@ -89,7 +91,7 @@ const LaptopSVG: React.FC<LaptopSVGProps> = ({ isDarkMode }) => {
         y1="50"
         x2="45"
         y2="50"
-        stroke="currentColor"
+        stroke={themeColor}
         strokeWidth="2"
         initial={{ pathLength: 0 }}
         animate={{ pathLength: 1 }}
@@ -108,7 +110,7 @@ const LaptopSVG: React.FC<LaptopSVGProps> = ({ isDarkMode }) => {
         y="48"
         width="2"
         height="4"
-        fill="currentColor"
+        fill={themeColor}
         initial={{ opacity: 0 }}
         animate={{ opacity: [0, 1, 1, 0] }}
         transition={{ duration: 1, repeat: Infinity, repeatDelay: 0.5 }}
