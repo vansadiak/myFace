@@ -8,7 +8,7 @@ export const introText = {
   name: "Kuldeep",
   role: "Full Stack Developer",
   location: "India",
-};
+} as const;
 
 export const socialLinks: SocialLink[] = [
   {
@@ -30,8 +30,3 @@ export const socialLinks: SocialLink[] = [
 
 export const cvDownloadLink =
   "https://drive.google.com/uc?export=download&id=1IthRqKms_w5I5xOij96YFUd2WfxoQYlb";
-
-export const getIntroText = (isDarkMode: boolean): string => {
-  const primaryClass = isDarkMode ? "text-primary-dark" : "text-primary-light";
-  return `I am <span class="${primaryClass}">${introText.name}</span>, <br /> <span class="${primaryClass}">${introText.role}</span> based in ${introText.location}`;
-};
