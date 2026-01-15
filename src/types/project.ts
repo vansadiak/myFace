@@ -85,10 +85,10 @@ export const projectData: Project[] = [
       ],
     ],
     technologies: [
-      "Full Stack",
-      "Scala",
       "Angular",
+      "Scala",
       "Ionic",
+      "SQL",
       "React",
       "Typescript",
       "D3",
