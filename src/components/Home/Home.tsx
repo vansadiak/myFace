@@ -3,7 +3,7 @@ import useDarkMode from "../../hooks/useDarkMode";
 import useTypingEffect from "../../hooks/useTypingEffect";
 import { FaGithub, FaLinkedin, FaFileAlt } from "react-icons/fa";
 import "./Home.css";
-import LaptopSVG from "./LaptopSVG"; // Import the new component
+import { LaptopSVG, RunningCursorSVG } from "./LaptopSVG";
 
 const Home: React.FC = () => {
   const [isDarkMode] = useDarkMode();
@@ -25,7 +25,10 @@ const Home: React.FC = () => {
             dangerouslySetInnerHTML={{ __html: displayedText }}
           ></h1>
           {displayedText.length === name.length && (
-            <LaptopSVG isDarkMode={isDarkMode} /> // Use the new component
+            <>
+              <LaptopSVG isDarkMode={isDarkMode} />
+              <RunningCursorSVG isDarkMode={isDarkMode} />
+            </>
           )}
         </header>
 
