@@ -20,18 +20,43 @@ export interface Project {
 export const projectData: Project[] = [
   {
     company: {
-      href: "https://solvei8.com",
-      text: "SOLVEI8",
+      href: "https://www.entrupy.com",
+      text: "ENTRUPY",
     },
-    role: "LEAD ENGINEER",
+    role: "SENIOR FULL STACK ENGINEER",
     period: {
-      start: "Oct 2024",
+      start: "Oct 2025",
       end: "Present",
     },
     location: "REMOTE, IN",
     achievements: [
+      "Building internal dashboards and customer support tools for authentication teams, focusing on efficiency, accuracy, and clear presentation of Entrupy's AI-powered authentication results.",
+      "Working across front-end and back-end stacks to improve workflows for globally distributed teams, including policy tracking, account management, and data investigation interfaces.",
+    ],
+    technologies: [
+      "Next.js",
+      "Python",
+      "AWS",
+      "Vuejs",
+      "React",
+      "Typescript",
+      "SQL",
+    ],
+  },
+  {
+    company: {
+      href: "https://solvei8.com",
+      text: "SOLVEI8",
+    },
+    role: "LEAD ENGINEER | SENIOR FRONT END DEVELOPER | FRONT END DEVELOPER",
+    period: {
+      start: "Sept 2021",
+      end: "Oct 2025",
+    },
+    location: "REMOTE, IN",
+    achievements: [
       [
-        "Leading a team of 5 developers as a Full Stack Engineer, managing both backend and frontend development for Maintaini8 - a comprehensive machine maintenance platform (Available on ",
+        "Led a team of 5 developers to build and scale Maintaini8, a full-stack machine maintenance platform with inventory management, downtime tracking, preventive maintenance, and real-time analytics (Available on ",
         {
           href: "https://play.google.com/store/apps/details?id=com.zinnov8.machine.maintenance&hl=en_IN",
           text: "Play Store",
@@ -41,37 +66,12 @@ export const projectData: Project[] = [
           href: "https://apps.apple.com/in/app/maintaini8/id1666505304",
           text: "App Store",
         },
-        "), overseeing the complete development lifecycle of Maintaini8, a full-fledged machine maintenance tool featuring inventory management, downtime tracking, automated breakdown assignments, preventive maintenance, and real-time analytics",
+        ")",
       ],
-
-      "Led comprehensive monorepo migration from Angular 14 to 16, including Ionic framework upgrades and Nx workspace migration, ensuring seamless transition while maintaining application stability and performance across multiple projects",
-    ],
-    technologies: [
-      "Full Stack",
-      "Scala",
-      "Angular",
-      "React",
-      "Typescript",
-      "Team Leadership",
-      "Backend",
-      "Frontend",
-      "Architecture",
-    ],
-  },
-  {
-    company: {
-      href: "https://solvei8.com",
-      text: "SOLVEI8",
-    },
-    role: "SENIOR FRONT END DEVELOPER",
-    period: {
-      start: "Sept 2023",
-      end: "Sept 2024",
-    },
-    location: "REMOTE, IN",
-    achievements: [
+      "Drove monorepo evolution across Angular (5–16), Ionic, and React, including major upgrades and Nx migrations, reducing feature development time by up to 80–90% and production bugs by over 80–95%.",
+      "Designed and implemented reusable UI libraries for dynamic forms, tables, charts, and shared typings/services/utils, cutting new feature effort by 60–80% and improving UX and maintainability.",
       [
-        "Leading a team of three in the development of a comprehensive Planning app for planners in apparel industry (Available on ",
+        "Delivered planning and analytics apps for apparel factories with rich timelines, D3-based visualizations, WebSocket dashboards, and stateful calendars (Available on ",
         {
           href: "https://play.google.com/store/apps/details?id=com.solvei8.tna.updates&hl=en",
           text: "Play Store",
@@ -81,49 +81,21 @@ export const projectData: Project[] = [
           href: "https://apps.apple.com/us/app/plani8/id6670177547",
           text: "App Store",
         },
-        "), integrating stateful calendars, timelines (leveraging D3), and customized tables/forms.",
+        "), adopted in production by global customers.",
       ],
-      "Spearheaded the expansion and introduction of the UI library in our Monorepo at Solvei8, introducing dynamic forms, tables, and charting elements to provide a standardized and scalable user interface for various applications. Also introduced and developed typing, services and utils library. This reduced the dev effort by 60-80%, production bug rates decreased by 50%, improved UX across applications, reduced dev testing by 40% and improved code quality and maintainability.",
-      "Successfully migrated legacy applications (angular 5) into a Monorepo like Tv dashboard which included real time dashboard with Websocket connections (whose support was not present in Monorepo) amongst other complex applications. This made sure that feature development time reduced by 80-90% for migrated applications, Production bug rates decreased by more than 95%.",
     ],
     technologies: [
+      "Full Stack",
+      "Scala",
       "Angular",
       "Ionic",
+      "React",
       "Typescript",
       "D3",
       "RxJS",
-      "React",
-      "Monorepo",
+      "Nx",
+      "Team Leadership",
     ],
-  },
-  {
-    company: {
-      href: "https://solvei8.com",
-      text: "SOLVEI8 (ex ZILINGO)",
-    },
-    role: "FRONT END DEVELOPER",
-    period: {
-      start: "Sept 2021",
-      end: "Sept 2023",
-    },
-    location: "REMOTE, IN",
-    achievements: [
-      [
-        "Developed a comprehensive analytics dashboard app (Available on ",
-        {
-          href: "https://play.google.com/store/apps/details?id=com.zilingo.factory&hl=en",
-          text: "Play Store",
-        },
-        " and ",
-        {
-          href: "https://apps.apple.com/us/app/solvei8-analytics/id6443829907",
-          text: "App Store",
-        },
-        ") for tracking apparel industry metrics and visualizing data in real-time.",
-      ],
-      "Successfully migrated legacy applications from Angular 5 to Angular 14 in a monorepo architecture using Angular, Ionic, and React. This update reduced technical debt by 40%, improved app performance by 30%, and enabled the dev team to deliver product updates 25% faster, aligning with evolving requirements.",
-    ],
-    technologies: ["Angular", "Ionic", "React", "Typescript", "RxJS"],
   },
   {
     company: {
