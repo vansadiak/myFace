@@ -51,7 +51,7 @@ const Home: React.FC = () => {
             <FaLinkedin className="h-6 w-6 transform transition-transform duration-200 hover:scale-125" />
           </a>
           <a
-            href="https://drive.google.com/file/d/1uxu_EqkN9jOfwqq3-7kULUpw7CVo3zno/view?usp=drive_link"
+            href="https://drive.google.com/file/d/1IthRqKms_w5I5xOij96YFUd2WfxoQYlb/view?usp=sharing"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Resume"
