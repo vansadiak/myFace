@@ -1,19 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import useDarkMode from "../../hooks/useDarkMode";
 import useTypingEffect from "../../hooks/useTypingEffect";
 import { FaGithub, FaLinkedin, FaFileAlt } from "react-icons/fa";
-import "./Home.css"; // Import the CSS file
+import "./Home.css";
+import LaptopSVG from "./LaptopSVG"; // Import the new component
 
-interface HomeProps {
-  message: string;
-}
-
-const Home: React.FC<HomeProps> = ({ message }) => {
+const Home: React.FC = () => {
   const [isDarkMode] = useDarkMode();
   const [name, setName] = useState(
-    "Hey, I am Kuldeep, <br /> Front End Developer based in Bali"
+    "Hey, I am Kuldeep, <br /> Front End Developer"
   );
-  const displayedText = useTypingEffect(name, 75); // Use the custom hook
+  const displayedText = useTypingEffect(name, 75);
 
   return (
     <div
@@ -22,11 +19,14 @@ const Home: React.FC<HomeProps> = ({ message }) => {
       } flex items-center justify-center`}
     >
       <div>
-        <header className="mb-4 ">
+        <header className="mb-4 flex items-center">
           <h1
             className="text-4xl font-bold typing retro-text"
             dangerouslySetInnerHTML={{ __html: displayedText }}
           ></h1>
+          {displayedText.length === name.length && (
+            <LaptopSVG isDarkMode={isDarkMode} /> // Use the new component
+          )}
         </header>
 
         <div
