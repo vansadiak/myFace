@@ -101,7 +101,7 @@ const AppContent: React.FC = () => {
         }
       >
         <nav
-          className={`fixed top-0 left-0 right-0 p-4 z-50 transition-all duration-300  ${
+          className={`fixed top-0 left-0 right-0 p-2 md:p-4 z-50 transition-all duration-300 flex flex-wrap justify-center md:justify-start gap-2 md:gap-4 ${
             isDarkMode
               ? "bg-gray-900 shadow-gray-900/20"
               : "bg-gray-100 backdrop-blur-sm"
@@ -111,7 +111,7 @@ const AppContent: React.FC = () => {
             <button
               key={route.path}
               onClick={() => navigate(route.path)}
-              className={`mr-4 px-4 py-2 transition-all duration-300 font-medium text-base ${
+              className={`px-2 md:px-4 py-1.5 md:py-2 transition-all duration-300 font-medium text-sm md:text-base ${
                 location.pathname === route.path
                   ? isDarkMode
                     ? "text-[#4ECDC4] border-b-2 border-[#4ECDC4]"

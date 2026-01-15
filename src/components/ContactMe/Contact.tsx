@@ -134,11 +134,11 @@ const Contact: React.FC = () => {
       </div>
 
       {/* Content container with relative positioning */}
-      <div className="relative z-10 w-full m-16">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8">
+      <div className="relative z-10 w-full mx-4 md:m-16">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-4 md:mb-8">
           <div className="md:w-1/2 mb-6 md:mb-0 text-center md:text-left">
             <motion.h2
-              className="text-4xl md:text-5xl font-medium tracking-tight leading-tight mb-2"
+              className="text-3xl md:text-5xl font-medium tracking-tight leading-tight mb-2"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -146,7 +146,7 @@ const Contact: React.FC = () => {
               Got a project in mind?
             </motion.h2>
             <motion.p
-              className="text-xl font-normal tracking-wide"
+              className="text-lg md:text-xl font-normal tracking-wide"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
@@ -157,7 +157,7 @@ const Contact: React.FC = () => {
           <form
             ref={form}
             onSubmit={handleSubmit}
-            className="w-full md:w-1/2 space-y-6"
+            className="w-full md:w-1/2 space-y-4 md:space-y-6"
           >
             <input
               type="text"
@@ -165,7 +165,7 @@ const Contact: React.FC = () => {
               value={formData.fullName}
               onChange={handleChange}
               placeholder="Enter Your Full Name"
-              className={`w-full p-3 rounded-lg font-normal ${
+              className={`w-full p-2.5 md:p-3 rounded-lg font-normal ${
                 isDarkMode
                   ? "bg-gray-800 text-white focus:ring-[#4ECDC4]"
                   : "bg-white text-black border border-gray-200 focus:ring-[#FF6B6B]"
