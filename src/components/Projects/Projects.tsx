@@ -127,30 +127,26 @@ const TableRow: React.FC<TableRowProps> = ({
 interface CardProps {
   project: Project;
   isExpanded: boolean;
-  isHighlighted: boolean;
   onToggle: () => void;
   theme: ReturnType<typeof getThemeClasses>;
 }
 
-const Card: React.FC<CardProps> = ({ project, isExpanded, isHighlighted, onToggle, theme }) => (
-  <div className={`border-2 mb-4 transition-colors ${isHighlighted ? "border-accent text-accent" : theme.border}`}>
+const Card: React.FC<CardProps> = ({ project, isExpanded, onToggle, theme }) => (
+  <div className={`border-2 mb-4 transition-colors ${theme.border}`}>
     <button
       onClick={onToggle}
       className={`w-full text-left p-4 hover:bg-accent hover:bg-opacity-10 transition-colors`}
     >
       <div className="flex justify-between items-start mb-2">
-        <span className="flex items-center gap-2">
-          <span className={`${isHighlighted ? "opacity-100" : "opacity-0"}`}>&gt;</span>
-          <a
-            href={project.company.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="font-bold hover:text-accent transition-colors"
-          >
-            {project.company.text} ↗
-          </a>
-        </span>
+        <a
+          href={project.company.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
+          className="font-bold hover:text-accent transition-colors"
+        >
+          {project.company.text} ↗
+        </a>
         <span className="text-sm opacity-70">
           {formatPeriod(project.period.start, project.period.end)}
         </span>
@@ -277,16 +273,16 @@ export const Projects: React.FC = () => {
               key={index}
               project={project}
               isExpanded={expandedIndices.has(index)}
-              isHighlighted={highlightedIndex === index}
               onToggle={() => toggleExpand(index)}
               theme={theme}
             />
           ))}
         </div>
 
-        {/* Keyboard hint */}
+        {/* Interaction hint */}
         <p className="text-xs opacity-50 mt-8 text-center">
-          Click to expand · <span className="hidden md:inline">[J/K] or [↑/↓] to navigate · [Enter] or [Space] to toggle</span>
+          <span className="md:hidden">Tap to expand</span>
+          <span className="hidden md:inline">Click to expand · [J/K] or [↑/↓] to navigate · [Enter] or [Space] to toggle</span>
         </p>
       </div>
     </div>
