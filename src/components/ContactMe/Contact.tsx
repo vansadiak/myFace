@@ -83,9 +83,9 @@ const Contact: React.FC = () => {
 
   return (
     <div
-      className={`h-full page-fade-in ${theme.background} ${theme.text} px-4 md:px-8 flex items-center justify-center overflow-hidden`}
+      className={`h-full page-fade-in ${theme.background} ${theme.text} px-4 md:px-8 py-8 flex items-center justify-center overflow-y-auto`}
     >
-      <div className="max-w-xl w-full">
+      <div className="max-w-xl w-full h-full">
         {/* Header */}
         <header className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold mb-2">CONTACT</h1>
