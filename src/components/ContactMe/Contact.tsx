@@ -1,9 +1,10 @@
 import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import useDarkMode from "../../hooks/useDarkMode";
+import { getThemeClasses } from "../../utils/theme-utils";
 import emailjs from "@emailjs/browser";
 
-// Replace hardcoded values with environment variables
+// Environment variables
 const SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID!;
 const ADMIN_TEMPLATE_ID = process.env.REACT_APP_EMAILJS_ADMIN_TEMPLATE_ID!;
 const RESPONSE_TEMPLATE_ID =
@@ -14,6 +15,8 @@ const Contact: React.FC = () => {
   const [isDarkMode] = useDarkMode();
   const [isLoading, setIsLoading] = useState(false);
   const form = useRef<HTMLFormElement>(null);
+  const themeClasses = getThemeClasses(isDarkMode);
+
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -44,21 +47,20 @@ const Contact: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Send notification to admin
-      const adminResult = await emailjs.sendForm(
-        SERVICE_ID,
-        ADMIN_TEMPLATE_ID,
-        form.current!,
-        PUBLIC_KEY
-      );
-
-      // Send auto-response to user
-      const userResult = await emailjs.sendForm(
-        SERVICE_ID,
-        RESPONSE_TEMPLATE_ID,
-        form.current!,
-        PUBLIC_KEY
-      );
+      const [adminResult, userResult] = await Promise.all([
+        emailjs.sendForm(
+          SERVICE_ID,
+          ADMIN_TEMPLATE_ID,
+          form.current!,
+          PUBLIC_KEY
+        ),
+        emailjs.sendForm(
+          SERVICE_ID,
+          RESPONSE_TEMPLATE_ID,
+          form.current!,
+          PUBLIC_KEY
+        ),
+      ]);
 
       if (adminResult.text === "OK" && userResult.text === "OK") {
         alert("Thank you for your message. I will get back to you soon!");
@@ -78,11 +80,20 @@ const Contact: React.FC = () => {
     }
   };
 
+  const inputClasses = `w-full p-2.5 md:p-3 rounded-lg font-normal 
+    ${
+      isDarkMode
+        ? `${themeClasses.secondary} text-white`
+        : "bg-white text-black border border-gray-200"
+    } 
+    focus:outline-none focus:ring-2 focus:ring-primary-${
+      isDarkMode ? "dark" : "light"
+    } 
+    transition-colors duration-200`;
+
   return (
     <div
-      className={`min-h-screen relative ${
-        isDarkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-black"
-      } flex items-center justify-center p-4 overflow-hidden`}
+      className={`min-h-screen relative ${themeClasses.background} ${themeClasses.text} flex items-center justify-center p-4 overflow-hidden`}
     >
       <style>{`
         input:-webkit-autofill,
@@ -119,7 +130,9 @@ const Contact: React.FC = () => {
           background-color: ${
             isDarkMode ? "rgb(31 41 55)" : "rgb(255 255 255)"
           } !important;
-          outline: 2px solid ${isDarkMode ? "#4ECDC4" : "#FF6B6B"} !important;
+          outline: 2px solid var(--theme-color-${
+            isDarkMode ? "dark" : "light"
+          }) !important;
           outline-offset: -2px !important;
         }
       `}</style>
@@ -134,7 +147,7 @@ const Contact: React.FC = () => {
         />
       </div>
 
-      {/* Content container with relative positioning */}
+      {/* Content container */}
       <div className="relative z-10 w-full mx-4 md:m-16">
         <div className="flex flex-col md:flex-row justify-between items-center mb-4 md:mb-8">
           <div className="md:w-1/2 mb-6 md:mb-0 text-center md:text-left">
@@ -166,11 +179,7 @@ const Contact: React.FC = () => {
               value={formData.fullName}
               onChange={handleChange}
               placeholder="Enter Your Full Name"
-              className={`w-full p-2.5 md:p-3 rounded-lg font-normal ${
-                isDarkMode
-                  ? "bg-gray-800 text-white focus:ring-[#4ECDC4]"
-                  : "bg-white text-black border border-gray-200 focus:ring-[#FF6B6B]"
-              } focus:outline-none focus:ring-2 transition-colors duration-200`}
+              className={inputClasses}
               required
             />
             <input
@@ -179,11 +188,7 @@ const Contact: React.FC = () => {
               value={formData.email}
               onChange={handleChange}
               placeholder="Enter Your Email"
-              className={`w-full p-3 rounded-lg font-normal ${
-                isDarkMode
-                  ? "bg-gray-800 text-white focus:ring-[#4ECDC4]"
-                  : "bg-white text-black border border-gray-200 focus:ring-[#FF6B6B]"
-              } focus:outline-none focus:ring-2 transition-colors duration-200`}
+              className={inputClasses}
               required
             />
             <textarea
@@ -191,21 +196,16 @@ const Contact: React.FC = () => {
               value={formData.message}
               onChange={handleChange}
               placeholder="How Can I Help You?"
-              className={`w-full p-3 rounded-lg font-normal ${
-                isDarkMode
-                  ? "bg-gray-800 text-white focus:ring-[#4ECDC4]"
-                  : "bg-white text-black border border-gray-200 focus:ring-[#FF6B6B]"
-              } focus:outline-none focus:ring-2 transition-colors duration-200 h-32`}
+              className={`${inputClasses} h-32`}
               required
-            ></textarea>
+            />
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full p-3 rounded-lg transition duration-300 font-medium text-base ${
-                isDarkMode
-                  ? "bg-[#4ECDC4] text-white hover:bg-[#45b8b0]"
-                  : "bg-[#FF6B6B] text-white hover:bg-[#ff5252]"
-              } ${isLoading ? "opacity-70 cursor-not-allowed" : ""}`}
+              className={`w-full p-3 rounded-lg transition duration-300 font-medium text-base 
+                bg-primary-${isDarkMode ? "dark" : "light"} 
+                hover:bg-primary-hover-${isDarkMode ? "dark" : "light"} 
+                text-white ${isLoading ? "opacity-70 cursor-not-allowed" : ""}`}
             >
               {isLoading ? (
                 <div className="flex items-center justify-center">

@@ -1,15 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import useDarkMode from "../../hooks/useDarkMode";
-import {
-  projectData,
-  TextWithLinks,
-  LinkObject,
-  Project,
-} from "../../types/project";
+import { Project, TextWithLinks } from "../../types/project";
+import { projectData } from "../../types/project";
+import { getThemeClasses } from "../../utils/theme-utils";
 
 // Component for rendering a single link
-const Link: React.FC<LinkObject> = ({ href, text }) => (
+const Link: React.FC<{ href: string; text: string }> = ({ href, text }) => (
   <a
     href={href}
     target="_blank"
@@ -20,63 +17,142 @@ const Link: React.FC<LinkObject> = ({ href, text }) => (
   </a>
 );
 
-// Component for rendering mixed content (array of strings and links)
-const MixedContent: React.FC<{ content: Array<string | LinkObject> }> = ({
-  content,
-}) => (
-  <span>
-    {content.map((item, index) => (
-      <React.Fragment key={index}>
-        {typeof item === "string" ? item : <Link {...item} />}
-      </React.Fragment>
-    ))}
-  </span>
-);
-
-// Component for rendering any type of TextWithLinks content
+// Component for rendering mixed content
 const TextContent: React.FC<{ content: TextWithLinks }> = ({ content }) => {
-  if (typeof content === "string") {
-    return <span>{content}</span>;
-  }
+  if (typeof content === "string") return <span>{content}</span>;
   if (Array.isArray(content)) {
-    return <MixedContent content={content} />;
+    return (
+      <span>
+        {content.map((item, index) => (
+          <React.Fragment key={index}>
+            {typeof item === "string" ? item : <Link {...item} />}
+          </React.Fragment>
+        ))}
+      </span>
+    );
   }
   return <Link {...content} />;
 };
 
-// Achievement component
-const Achievement: React.FC<{
-  achievement: TextWithLinks;
+const TimelineProject: React.FC<{
+  project: Project;
+  index: number;
   isDarkMode: boolean;
-}> = ({ achievement, isDarkMode }) => (
-  <p
-    className={`text-sm md:text-base leading-relaxed ${
-      isDarkMode ? "text-gray-300" : "text-gray-700"
-    }`}
-  >
-    <TextContent content={achievement} />
-  </p>
-);
+  isActive: boolean;
+  onHover: () => void;
+  onLeave: () => void;
+}> = ({ project, index, isDarkMode, isActive, onHover, onLeave }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [isExpanded, setIsExpanded] = useState(false);
+  const themeClasses = getThemeClasses(isDarkMode);
+
+  return (
+    <motion.div
+      ref={ref}
+      style={{ marginLeft: `${index * 2}rem` }}
+      className="mb-16 relative"
+      initial={{ opacity: 0, x: -50 }}
+      animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      onMouseEnter={onHover}
+      onMouseLeave={onLeave}
+    >
+      {/* Timeline connector */}
+      <div
+        className={`absolute left-[-2rem] top-2 w-0.5 h-full ${themeClasses.accent}`}
+      />
+
+      {/* Timeline dot */}
+      <motion.div
+        className={`absolute left-[-2.250rem] top-0 w-3 h-3 rounded-full ${
+          isActive ? themeClasses.primaryBg : themeClasses.neutralBg
+        }`}
+        whileHover={{ scale: 1.5 }}
+        animate={{ scale: isActive ? 1.3 : 1 }}
+      />
+
+      {/* Project content */}
+      <motion.div
+        className={`p-6 rounded-lg ${themeClasses.secondary} backdrop-blur-sm shadow-lg`}
+        whileHover={{ x: 10 }}
+      >
+        <div className="mb-4">
+          <motion.div
+            className={`text-sm font-mono mb-2 ${themeClasses.primary}`}
+          >
+            {project.period.start} — {project.period.end}
+          </motion.div>
+          <h3 className="text-xl font-semibold mb-2">
+            <TextContent content={project.company} />
+          </h3>
+          <div className="text-sm opacity-80">{project.role}</div>
+        </div>
+
+        {/* Achievements */}
+        <motion.div className="space-y-3">
+          {(isExpanded
+            ? project.achievements
+            : project.achievements.slice(0, 2)
+          ).map((achievement, i) => (
+            <motion.p
+              key={i}
+              className={`text-sm leading-relaxed ${
+                isDarkMode ? "text-gray-300" : "text-gray-700"
+              }`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: i * 0.1 }}
+            >
+              <TextContent content={achievement} />
+            </motion.p>
+          ))}
+          {!isExpanded && project.achievements.length > 2 && (
+            <motion.button
+              onClick={() => setIsExpanded(true)}
+              className={`text-sm ${themeClasses.primary} ${themeClasses.primaryHover}`}
+            >
+              Show more...
+            </motion.button>
+          )}
+          {isExpanded && (
+            <motion.button
+              onClick={() => setIsExpanded(false)}
+              className={`text-sm ${themeClasses.primary} ${themeClasses.primaryHover}`}
+            >
+              Show less
+            </motion.button>
+          )}
+        </motion.div>
+
+        {/* Tech stack */}
+        <div className="mt-4 flex flex-wrap gap-2">
+          {project.technologies.map((tech, i) => (
+            <motion.span
+              key={i}
+              className={`px-2 py-1 text-xs rounded-full ${themeClasses.accent} ${themeClasses.primary}`}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2 + i * 0.05 }}
+              whileHover={{ scale: 1.1 }}
+            >
+              {tech}
+            </motion.span>
+          ))}
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
 
 export const Projects: React.FC = () => {
   const [isDarkMode] = useDarkMode();
-
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      setIsScrolled(scrollPosition > 0);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-  }, []);
+  const [activeProject, setActiveProject] = useState<number | null>(null);
+  const themeClasses = getThemeClasses(isDarkMode);
 
   return (
     <div
-      className={`min-h-screen relative ${
-        isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"
-      } py-20 px-4 md:px-8 overflow-hidden`}
+      className={`min-h-screen relative ${themeClasses.background} ${themeClasses.text} py-20 px-4 md:px-8`}
     >
       {/* Background GIF */}
       <div className="absolute inset-0 w-full h-full z-0 select-none">
@@ -85,118 +161,43 @@ export const Projects: React.FC = () => {
           alt="Background animation"
           draggable="false"
           className={`w-full h-full object-cover transition-opacity duration-500 ${
-            isScrolled ? "opacity-5" : "opacity-0"
+            activeProject !== null ? "opacity-5" : "opacity-0"
           }`}
         />
       </div>
 
-      {/* Content container with relative positioning to appear above the background */}
-      <div className="relative z-10 max-w-5xl mx-auto">
-        <motion.h2
-          className={`text-2xl md:text-5xl font-medium tracking-tight leading-tight mb-6 md:mb-16 ${
-            isDarkMode ? "text-white" : "text-black"
-          }`}
+      {/* Content */}
+      <div className="relative z-10 max-w-6xl mx-auto">
+        <motion.div
+          className="text-left mb-16"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          Experience
-        </motion.h2>
+          <h2 className="text-3xl md:text-5xl font-medium mb-4">
+            <span className={themeClasses.primary}>Featured Projects</span>
+          </h2>
+          <p className="text-lg md:text-xl opacity-80">
+            Some things I've built at work
+          </p>
+        </motion.div>
 
-        <div className="space-y-8 md:space-y-24">
+        {/* Timeline-style projects */}
+        <div className="relative">
           {projectData.map((project, index) => (
-            <ProjectCard
-              key={`${project.company}-${project.period.start}`}
+            <TimelineProject
+              key={index}
               project={project}
               index={index}
               isDarkMode={isDarkMode}
+              isActive={activeProject === index}
+              onHover={() => setActiveProject(index)}
+              onLeave={() => setActiveProject(null)}
             />
           ))}
         </div>
       </div>
     </div>
-  );
-};
-
-// ProjectCard component
-const ProjectCard: React.FC<{
-  project: Project;
-  index: number;
-  isDarkMode: boolean;
-}> = ({ project, index, isDarkMode }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      className="relative"
-      initial={{ opacity: 0, y: 50 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-      transition={{ duration: 0.5, delay: 0.2 }}
-    >
-      <div className="flex flex-col space-y-3 md:space-y-6">
-        <div className="flex flex-col space-y-1 md:space-y-2">
-          <div className="flex flex-col md:flex-row md:items-baseline md:justify-between gap-1 md:gap-0">
-            <h3
-              className={`text-lg md:text-2xl font-medium ${
-                isDarkMode ? "text-[#4ECDC4]" : "text-[#FF6B6B]"
-              }`}
-            >
-              {project.role}
-            </h3>
-            <span
-              className={`text-[0.7rem] md:text-sm ${
-                isDarkMode ? "text-gray-300" : "text-gray-600"
-              }`}
-            >
-              {project.period.start} — {project.period.end}
-            </span>
-          </div>
-          <div className="flex flex-col md:flex-row md:items-center gap-0.5 md:gap-2">
-            <span
-              className={`text-sm md:text-lg ${
-                isDarkMode ? "text-gray-300" : "text-gray-700"
-              }`}
-            >
-              <TextContent content={project.company} />
-            </span>
-            <span
-              className={`text-[0.7rem] md:text-sm ${
-                isDarkMode ? "text-gray-400" : "text-gray-600"
-              }`}
-            >
-              · {project.location}
-            </span>
-          </div>
-        </div>
-
-        <div className="space-y-2 md:space-y-4">
-          {project.achievements.map((achievement, i) => (
-            <Achievement
-              key={i}
-              achievement={achievement}
-              isDarkMode={isDarkMode}
-            />
-          ))}
-        </div>
-
-        <div className="flex flex-wrap gap-1 md:gap-2 mt-1 md:mt-4">
-          {project.technologies.map((tech, i) => (
-            <span
-              key={i}
-              className={`px-1.5 md:px-3 py-0.5 md:py-1 text-[0.65rem] md:text-sm rounded-full transform transition-transform duration-200 hover:scale-110 ${
-                isDarkMode
-                  ? "bg-gray-800 text-[#4ECDC4] border border-[#4ECDC4]/20"
-                  : "bg-gray-50 text-[#FF6B6B] border border-[#FF6B6B]/20"
-              }`}
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-      </div>
-    </motion.div>
   );
 };
 
