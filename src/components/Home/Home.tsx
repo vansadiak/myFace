@@ -117,7 +117,7 @@ const Home: React.FC<HomeProps> = ({ hasTyped, setHasTyped }) => {
       </div>
 
       {/* Footer - 10vh */}
-      <div className="h-[10vh] flex items-center justify-center relative z-10">
+      <div className="h-[10vh] flex items-center justify-center relative z-10 mb-10">
         <a
           href="https://drive.google.com/uc?export=download&id=1IthRqKms_w5I5xOij96YFUd2WfxoQYlb"
           target="_blank"
