@@ -7,6 +7,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import useDarkMode from "../../hooks/useDarkMode";
+import { getThemeClasses } from "../../utils/theme-utils";
 
 // Lazy load components
 const Home = lazy(() => import("../Home/Home"));
@@ -27,6 +28,7 @@ const routes: RouteConfig[] = [
 
 const AppContent: React.FC = () => {
   const [isDarkMode] = useDarkMode();
+  const themeClasses = getThemeClasses(isDarkMode);
   const location = useLocation();
   const navigate = useNavigate();
   const [hasTyped, setHasTyped] = useState(false);
@@ -90,36 +92,30 @@ const AppContent: React.FC = () => {
     <div>
       <style>{`
         html, body {
-          background-color: ${
-            isDarkMode ? "rgb(17 24 39)" : "rgb(243 244 246)"
-          };
+          background-color: ${isDarkMode ? "#111827" : "#F9FAFB"};
         }
       `}</style>
-      <div
-        className={
-          isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"
-        }
-      >
+      <div className={`${themeClasses.background} ${themeClasses.text}`}>
         <nav
-          className={`fixed top-0 left-0 right-0 p-2 md:p-4 z-50 transition-all duration-300 flex flex-wrap justify-center md:justify-start gap-2 md:gap-4 ${
-            isDarkMode
-              ? "bg-gray-900 shadow-gray-900/20"
-              : "bg-gray-100 backdrop-blur-sm"
+          className={`fixed top-0 left-0 right-0 p-2 md:p-4 z-50 transition-all duration-300 
+            flex flex-wrap justify-center md:justify-start gap-2 md:gap-4 
+            ${themeClasses.background} ${
+            isDarkMode ? "shadow-gray-900/20" : "backdrop-blur-sm"
           }`}
         >
-          {routes.map((route, index) => (
+          {routes.map((route) => (
             <button
               key={route.path}
               onClick={() => navigate(route.path)}
-              className={`px-2 md:px-4 py-1.5 md:py-2 transition-all duration-300 font-medium text-sm md:text-base ${
-                location.pathname === route.path
-                  ? isDarkMode
-                    ? "text-[#4ECDC4] border-b-2 border-[#4ECDC4]"
-                    : "text-[#FF6B6B] border-b-2 border-[#FF6B6B]"
-                  : isDarkMode
-                  ? "text-gray-300 hover:text-[#4ECDC4]"
-                  : "text-gray-600 hover:text-[#FF6B6B]"
-              }`}
+              className={`px-2 md:px-4 py-1.5 md:py-2 transition-all duration-300 font-medium text-sm md:text-base 
+                border-b-2 
+                ${
+                  location.pathname === route.path
+                    ? `${themeClasses.primary} ${themeClasses.primaryBorder}`
+                    : `${isDarkMode ? "text-gray-300" : "text-gray-600"} 
+                       ${themeClasses.primaryHover}
+                       border-transparent`
+                }`}
             >
               {route.label}
             </button>
