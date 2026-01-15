@@ -1,13 +1,12 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import useDarkMode from "../../hooks/useDarkMode";
 import { getThemeClasses } from "../../utils/theme-utils";
 import { introText, socialLinks } from "../../types/me";
+import TypingGame from "./TypingGame";
 
 const Home: React.FC = () => {
   const [isDarkMode] = useDarkMode();
   const theme = getThemeClasses(isDarkMode);
-  const navigate = useNavigate();
 
   return (
     <div
@@ -27,13 +26,8 @@ const Home: React.FC = () => {
           {introText.role} &bull; {introText.location}
         </p>
 
-        {/* Tagline - Clickable with blinking cursor */}
-        <button
-          onClick={() => navigate("/experience")}
-          className={`text-base md:text-lg opacity-80 mb-10 ${theme.accentHover} transition-colors text-left`}
-        >
-          &gt; Building interfaces that work.<span className="blink-cursor">_</span>
-        </button>
+        {/* Typing Game */}
+        <TypingGame isDarkMode={isDarkMode} />
 
         {/* Social Links */}
         <div className="flex flex-wrap gap-4">
