@@ -44,11 +44,12 @@ const Home: React.FC<HomeProps> = ({ hasTyped, setHasTyped }) => {
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
       {showGif && (
-        <div className="absolute inset-0 w-full h-full">
+        <div className="absolute inset-0 w-full h-full select-none">
           <img
             src="https://media.giphy.com/media/xTkcEQACH24SMPxIQg/giphy.gif"
             alt="Background animation"
             className="w-full h-full object-cover opacity-200"
+            draggable="false"
           />
         </div>
       )}
