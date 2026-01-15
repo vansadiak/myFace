@@ -4,6 +4,7 @@ import useTypingEffect from "../../hooks/useTypingEffect";
 import { FaGithub, FaLinkedin, FaFileAlt, FaEnvelope } from "react-icons/fa";
 import { getThemeClasses } from "../../utils/theme-utils";
 import LaptopSVG from "./LaptopSVG";
+import { getIntroText, socialLinks, cvDownloadLink } from "../../types/me";
 
 interface HomeProps {
   hasTyped: boolean;
@@ -13,11 +14,7 @@ interface HomeProps {
 const Home: React.FC<HomeProps> = ({ hasTyped, setHasTyped }) => {
   const [isDarkMode] = useDarkMode();
   const themeClasses = getThemeClasses(isDarkMode);
-  const [name] = useState(
-    `I am <span class="${isDarkMode ? "text-primary-dark" : "text-primary-light"
-    }">Kuldeep</span>, <br /> <span class="${isDarkMode ? "text-primary-dark" : "text-primary-light"
-    }">Front End Developer</span> based in India`
-  );
+  const [name] = useState(getIntroText(isDarkMode));
   const [showGif, setShowGif] = useState(false);
   const displayedText = useTypingEffect(name, 60, !hasTyped);
 
@@ -81,37 +78,32 @@ const Home: React.FC<HomeProps> = ({ hasTyped, setHasTyped }) => {
           </header>
 
           <div
-            className={`flex justify-center space-x-4 mt-8 transition-opacity duration-1000 ${displayedText.length === name.length ? "opacity-100" : "opacity-25"
-              }`}
+            className={`flex justify-center space-x-4 mt-8 transition-opacity duration-1000 ${
+              displayedText.length === name.length
+                ? "opacity-100"
+                : "opacity-25"
+            }`}
           >
-            {[
-              {
-                href: "https://github.com/vansadiak",
-                icon: FaGithub,
-                label: "GitHub",
-              },
-              {
-                href: "https://www.linkedin.com/in/kuldeep-vansadia-34b7631a6/",
-                icon: FaLinkedin,
-                label: "LinkedIn",
-              },
-              {
-                href: "https://drive.google.com/file/d/1IthRqKms_w5I5xOij96YFUd2WfxoQYlb/view?usp=sharing",
-                icon: FaFileAlt,
-                label: "Resume",
-              },
-            ].map(({ href, icon: Icon, label }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={label}
-                className={`${themeClasses.primary} ${themeClasses.primaryHover}`}
-              >
-                <Icon className="h-6 w-6 transform transition-transform duration-200 hover:scale-125" />
-              </a>
-            ))}
+            {socialLinks.map(({ href, iconName, label }) => {
+              const iconMap = {
+                github: FaGithub,
+                linkedin: FaLinkedin,
+                resume: FaFileAlt,
+              };
+              const Icon = iconMap[iconName];
+              return (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className={`${themeClasses.primary} ${themeClasses.primaryHover}`}
+                >
+                  <Icon className="h-6 w-6 transform transition-transform duration-200 hover:scale-125" />
+                </a>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -119,7 +111,7 @@ const Home: React.FC<HomeProps> = ({ hasTyped, setHasTyped }) => {
       {/* Footer - 10vh */}
       <div className="h-[10vh] flex items-center justify-center relative z-10 mb-10">
         <a
-          href="https://drive.google.com/uc?export=download&id=1IthRqKms_w5I5xOij96YFUd2WfxoQYlb"
+          href={cvDownloadLink}
           target="_blank"
           rel="noopener noreferrer"
           className={`px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${themeClasses.primary} ${themeClasses.primaryHover} hover:shadow-xl border-2 ${themeClasses.primary} flex items-center space-x-3`}
