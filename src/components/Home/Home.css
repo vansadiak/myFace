@@ -1,14 +1,31 @@
+@font-face {
+  font-family: "Munro";
+  src: url("https://www.fontsquirrel.com/fonts/download/munro")
+    format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Add the retro-text class */
+.retro-text {
+  font-family: "Munro", monospace;
+  font-size: 24px; /* Adjust the size as needed */
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Optional: Add a shadow for a more retro effect */
+  image-rendering: pixelated; /* Ensure the text looks pixelated */
+}
+
+/* Existing typing class */
 .typing::after {
-  content: "_";
+  content: "";
   display: inline-block;
   width: 2px; /* Adjust the width of the cursor */
   height: 1em; /* Match the height of the text */
-  animation: blink 1s infinite;
+  animation: blink 3s infinite;
   vertical-align: bottom; /* Aligns the cursor to the bottom of the text */
   margin-left: 2px; /* Adds a small space between the text and the cursor */
   position: relative;
-  left: -24px;
-  top: 6px;
+  left: -20px;
+  top: -8px;
 }
 
 @keyframes blink {
