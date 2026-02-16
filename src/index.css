@@ -3,7 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --accent: #ff0000;
+  /* Default palette: Dandiya Night, light mode */
+  --bg: #FFFDF7;
+  --text: #1A0A00;
+  --border: #1A0A00;
+  --accent1: #E65100;
+  --accent2: #C2185B;
+  --font-heading: "Unbounded";
+  --font-body: "IBM Plex Sans";
 }
 
 * {
@@ -17,15 +24,22 @@ html {
 
 body {
   margin: 0;
-  font-family: "IBM Plex Mono", monospace;
+  font-family: var(--font-body), monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100%;
   overflow: hidden;
+  background-color: var(--bg);
+  color: var(--text);
 }
 
 #root {
   height: 100%;
+}
+
+/* Headings use heading font */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading), monospace;
 }
 
 /* Remove default focus outline, add brutalist focus */
@@ -34,7 +48,7 @@ body {
 }
 
 *:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--accent1);
   outline-offset: 2px;
 }
 
@@ -49,12 +63,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--accent);
+  background: var(--accent1);
 }
 
 /* Selection styling */
 ::selection {
-  background: var(--accent);
+  background: var(--accent1);
   color: white;
 }
 
@@ -64,9 +78,18 @@ body {
 }
 
 .hover-invert:hover {
-  background-color: var(--accent);
-  border-color: var(--accent);
+  background-color: var(--accent1);
+  border-color: var(--accent1);
   color: white;
+}
+
+/* Subtle accent hover (10% accent overlay) */
+.hover-accent-subtle {
+  transition: background-color 0.15s ease-out;
+}
+
+.hover-accent-subtle:hover {
+  background-color: color-mix(in srgb, var(--accent1) 10%, transparent);
 }
 
 /* Page fade-in animation */

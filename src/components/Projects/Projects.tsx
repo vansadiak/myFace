@@ -52,7 +52,6 @@ interface TableRowProps {
   isExpanded: boolean;
   isHighlighted: boolean;
   onToggle: () => void;
-  isDarkMode: boolean;
   theme: ReturnType<typeof getThemeClasses>;
 }
 
@@ -61,13 +60,12 @@ const TableRow: React.FC<TableRowProps> = ({
   isExpanded,
   isHighlighted,
   onToggle,
-  isDarkMode,
   theme,
 }) => (
   <>
     <tr
       onClick={onToggle}
-      className={`border-b-2 cursor-pointer hover:bg-accent hover:bg-opacity-10 transition-colors ${isHighlighted ? "border-accent text-accent" : theme.border}`}
+      className={`border-b-2 cursor-pointer transition-colors hover-accent-subtle ${isHighlighted ? "border-accent text-accent" : theme.border}`}
     >
       <td className="py-4 px-4 font-medium whitespace-nowrap">
         <span className={`mr-2 ${isHighlighted ? "opacity-100" : "opacity-0"}`}>&gt;</span>
@@ -95,7 +93,8 @@ const TableRow: React.FC<TableRowProps> = ({
         <div className={`expand-content ${isExpanded ? "expanded" : ""}`}>
           <div>
             <div
-              className={`border-2 ${theme.border} p-4 m-4 ${isDarkMode ? "bg-white bg-opacity-5" : "bg-black bg-opacity-5"}`}
+              className={`border-2 ${theme.border} p-4 m-4`}
+              style={{ backgroundColor: "color-mix(in srgb, var(--text) 5%, var(--bg))" }}
             >
               <ul className="space-y-2 text-sm mb-4">
                 {project.achievements.map((achievement, i) => (
@@ -135,7 +134,7 @@ const Card: React.FC<CardProps> = ({ project, isExpanded, onToggle, theme }) => 
   <div className={`border-2 mb-4 transition-colors ${theme.border}`}>
     <button
       onClick={onToggle}
-      className={`w-full text-left p-4 hover:bg-accent hover:bg-opacity-10 transition-colors`}
+      className={`w-full text-left p-4 hover-accent-subtle transition-colors`}
     >
       <div className="flex justify-between items-start mb-2">
         <a
@@ -227,8 +226,8 @@ export const Projects: React.FC = () => {
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <header className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold mb-2">EXPERIENCE</h1>
-          <div className={`w-full h-0.5 ${isDarkMode ? "bg-white" : "bg-black"}`} />
+          <h1 className={`text-3xl md:text-4xl font-bold mb-2 ${theme.accent}`}>EXPERIENCE</h1>
+          <div className={`w-full h-0.5 ${theme.divider}`} />
         </header>
 
         {/* Desktop Table */}
@@ -258,7 +257,6 @@ export const Projects: React.FC = () => {
                   isExpanded={expandedIndices.has(index)}
                   isHighlighted={highlightedIndex === index}
                   onToggle={() => toggleExpand(index)}
-                  isDarkMode={isDarkMode}
                   theme={theme}
                 />
               ))}

@@ -20,7 +20,7 @@ const Home: React.FC = () => {
         </h1>
 
         {/* Divider */}
-        <div className={`w-full h-0.5 ${isDarkMode ? "bg-white" : "bg-black"} mb-4`} />
+        <div className={`w-full h-0.5 ${theme.divider} mb-4`} />
 
         {/* Role & Location */}
         <p className="text-lg md:text-xl mb-6">

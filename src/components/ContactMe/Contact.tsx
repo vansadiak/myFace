@@ -88,8 +88,8 @@ const Contact: React.FC = () => {
       <div className="max-w-xl w-full h-full overflow-y-auto px-4 md:px-8 py-8 ">
         {/* Header */}
         <header className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold mb-2">CONTACT</h1>
-          <div className={`w-full h-0.5 ${isDarkMode ? "bg-white" : "bg-black"} mb-4`} />
+          <h1 className={`text-3xl md:text-4xl font-bold mb-2 ${theme.accent}`}>CONTACT</h1>
+          <div className={`w-full h-0.5 ${theme.divider} mb-4`} />
           <p className="text-base opacity-80">
             Got a project? Drop me a line.
           </p>
